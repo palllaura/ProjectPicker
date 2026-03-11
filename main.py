@@ -1,18 +1,27 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+from sqlalchemy.orm import Session
 
-from database import Base, engine
+from database import engine, Base, SessionLocal
 from models import user, project, user_projects
+from seed_data import seed_projects
 
-from routers import user_router, project_router
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    """Initialize database schema and seed initial project data on application startup."""
+    Base.metadata.create_all(bind=engine)
 
-app.include_router(user_router.router)
-app.include_router(project_router.router)
+    db: Session = SessionLocal()
+    seed_projects(db)
+    db.close()
 
-Base.metadata.create_all(bind=engine)
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
 def root():
+    """Simple health check endpoint to verify that the API is running."""
     return {"message": "ProjectPicker API running"}
