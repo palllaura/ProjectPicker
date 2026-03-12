@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from database import engine, Base, SessionLocal
 from models import user, project, user_projects
+from routers.project_router import router as project_router
 from seed_data import seed_projects
 
 
@@ -19,6 +20,7 @@ async def lifespan(_app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(project_router)
 
 
 @app.get("/")
