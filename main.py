@@ -1,6 +1,8 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from sqlalchemy.orm import Session
+from starlette.responses import FileResponse
 
 from database import engine, Base, SessionLocal
 from models import user, project, user_projects
@@ -21,11 +23,12 @@ async def lifespan(_app: FastAPI):
     yield
 
 app = FastAPI(lifespan=lifespan)
+app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 app.include_router(project_router)
 app.include_router(user_router)
 
 
 @app.get("/")
 def root():
-    """Simple health check endpoint to verify that the API is running."""
-    return {"message": "ProjectPicker API running"}
+    """Serve frontend page."""
+    return FileResponse("frontend/index.html")
