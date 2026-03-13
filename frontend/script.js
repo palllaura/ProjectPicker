@@ -60,11 +60,36 @@ function setupForm() {
                 throw new Error("Failed to save profile")
             }
 
-            await response.json()
+            const result = await response.json()
+            fillForm(result.user)
 
         } catch (error) {
             console.error("Error submitting form:", error)
         }
+    })
+}
+
+function fillForm(user) {
+    const form = document.getElementById("assignment-form")
+
+    form.name.value = user.name
+    form.email.value = user.email
+    form.experience_level.value = user.experience_level
+    form.primary_stack.value = user.primary_stack
+    form.skills.value = user.skills || ""
+
+    const duration = document.querySelector(
+        `input[name="preferred_duration"][value="${user.preferred_duration}"]`
+    )
+
+    if (duration) {
+        duration.checked = true
+    }
+
+    const select = document.getElementById("projects")
+
+    Array.from(select.options).forEach(option => {
+        option.selected = user.projects.includes(Number(option.value))
     })
 }
 
