@@ -56,16 +56,24 @@ function setupForm() {
 
             if (!response.ok) {
                 const error = await response.json()
+                showMessage("Invalid data. Please check your inputs.", true)
                 console.error("Backend validation error:", error)
-                throw new Error("Failed to save profile")
+                return
             }
 
             const result = await response.json()
             fillForm(result.user)
+            showMessage(result.message)
 
         } catch (error) {
+            showMessage("Something went wrong. Please try again.", true)
             console.error("Error submitting form:", error)
         }
+    })
+
+    form.addEventListener("reset", () => {
+        const box = document.getElementById("form-message")
+        box.textContent = ""
     })
 }
 
@@ -97,3 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
     void loadProjects()
     setupForm()
 })
+
+function showMessage(text, isError = false) {
+    const box = document.getElementById("form-message")
+    box.textContent = text
+    box.style.color = isError ? "red" : "green"
+}
