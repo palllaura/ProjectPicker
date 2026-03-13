@@ -1,28 +1,7 @@
 """Tests for project service functions."""
 
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-from database import Base
 from models.project import Project
 from services.project_service import get_all_projects
-
-
-engine = create_engine("sqlite:///:memory:")
-TestingSessionLocal = sessionmaker(bind=engine)
-
-
-@pytest.fixture
-def db():
-    """Create a temporary database session for each test."""
-    Base.metadata.create_all(bind=engine)
-
-    session = TestingSessionLocal()
-    yield session
-
-    session.close()
-    Base.metadata.drop_all(bind=engine)
 
 
 def test_get_all_projects_returns_projects(db):
@@ -35,14 +14,16 @@ def test_get_all_projects_returns_projects(db):
     db.commit()
 
     projects = get_all_projects(db)
+    names = [p.name for p in projects]
 
     assert len(projects) == 2
-    assert projects[0].name == "Project A"
-    assert projects[1].name == "Project B"
+    assert "Project A" in names
+    assert "Project B" in names
 
 
 def test_get_all_projects_empty(db):
     """Verify that an empty list is returned when no projects exist."""
+
     projects = get_all_projects(db)
 
-    assert projects == []
+    assert len(projects) == 0

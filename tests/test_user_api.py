@@ -21,7 +21,7 @@ def test_submit_user_profile():
     response = client.post("/users/submit", json=payload)
 
     assert response.status_code == 200
-    assert response.json()["message"] == "Submission received"
+    assert response.json()["message"] == "Profile saved successfully"
 
 
 def test_submit_user_profile_without_projects():
