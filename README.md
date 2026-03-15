@@ -90,3 +90,6 @@ Main endpoints:
 - POST /users/submit (creates a new user profile or updates an existing one based on the email address)
 
 ## Screenshots
+![Form](screenshots/form.png)
+
+![Swagger](screenshots/swagger.png)
