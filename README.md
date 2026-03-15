@@ -8,7 +8,7 @@ Employees can create a profile, select projects they are interested in, and upda
 - Form validation (client-side and server-side)
 - Create new profile or update an existing one based on email
 - Store employee data and project selections in a database
-- Backend REST API
+- Backend REST API built with FastAPI
 
 ## Tech Stack
 ### Backend:
@@ -20,6 +20,7 @@ Employees can create a profile, select projects they are interested in, and upda
 ### Frontend:
 - Vanilla JavaScript
 - HTML
+- Basic CSS
 
 ## Prerequisites
 - Python 3.11+
@@ -68,24 +69,24 @@ The application uses PostgreSQL with the following main tables:
 - projects – available internal projects
 - user_projects – mapping table for user project selections
 
-Project data is imported from the provided HTML project list.
+The projects table is pre-populated with the internal project list.
 
 ## Frontend
 
-The frontend is implemented using simple HTML and Vanilla JavaScript.
+The frontend is implemented using simple HTML, CSS and Vanilla JavaScript.
 
 The project assignment form allows users to:
 
 - enter profile information
 - select one or more projects
-- submit and update their profile
+- submit or update their profile
 
 Project options in the dropdown are loaded dynamically from the backend API.
 
 ## API Overview
 
-Example endpoints:
-- GET /projects
-- POST /profile
-- PUT /profile
-- GET /profile
+Main endpoints:
+- GET /projects (returns the list of available projects)
+- POST /users/submit (creates a new user profile or updates an existing one based on the email address)
+
+## Screenshots
